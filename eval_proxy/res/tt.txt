@@ -1,0 +1,56 @@
+Start Model 0 ...
+Start Model 0 ...
+#1  f1_mic: 0.71965, f1_mac: 0.67577, prec: -1, rec: -1, n: 30, c : [(2, 10), (1, 10), (0, 10)], t_train: 0.0786, t_inf: 0.0309
+__ End Warmstart
+#2  f1_mic: 0.77378, f1_mac: 0.64131, prec: -1, rec: -1, n: 130, c : [(2, 61), (1, 37), (0, 32)], t_train: 0.0404, t_inf: 0.011
+#3  f1_mic: 0.79693, f1_mac: 0.71657, prec: -1, rec: -1, n: 230, c : [(2, 86), (1, 74), (0, 70)], t_train: 0.1015, t_inf: 0.0109
+__ Checkpoint: Save Data
+#4  f1_mic: 0.80726, f1_mac: 0.73739, prec: -1, rec: -1, n: 330, c : [(2, 122), (0, 105), (1, 103)], t_train: 0.0456, t_inf: 0.0559
+#5  f1_mic: 0.81727, f1_mac: 0.76272, prec: -1, rec: -1, n: 430, c : [(2, 157), (0, 151), (1, 122)], t_train: 0.0703, t_inf: 0.0072
+__ Checkpoint: Save Data
+Done AL
+
+Start Model 1 ...
+#1  f1_mic: 0.78191, f1_mac: 0.72575, prec: -1, rec: -1, n: 30, c : [(2, 10), (1, 10), (0, 10)], t_train: 0.0156, t_inf: 0.0151
+__ End Warmstart
+#2  f1_mic: 0.6821, f1_mac: 0.50644, prec: -1, rec: -1, n: 130, c : [(2, 72), (0, 36), (1, 22)], t_train: 0.0634, t_inf: 0.0072
+#3  f1_mic: 0.79036, f1_mac: 0.70309, prec: -1, rec: -1, n: 230, c : [(1, 86), (2, 85), (0, 59)], t_train: 0.0524, t_inf: 0.007
+__ Checkpoint: Save Data
+#4  f1_mic: 0.81758, f1_mac: 0.76294, prec: -1, rec: -1, n: 330, c : [(1, 115), (0, 108), (2, 107)], t_train: 0.0728, t_inf: 0.0073
+#5  f1_mic: 0.80976, f1_mac: 0.74513, prec: -1, rec: -1, n: 430, c : [(2, 152), (1, 149), (0, 129)], t_train: 0.0721, t_inf: 0.0072
+__ Checkpoint: Save Data
+Done AL
+
+Start Model 2 ...
+#1  f1_mic: 0.64831, f1_mac: 0.62389, prec: -1, rec: -1, n: 30, c : [(2, 10), (1, 10), (0, 10)], t_train: 0.0131, t_inf: 0.0073
+__ End Warmstart
+#2  f1_mic: 0.76439, f1_mac: 0.66814, prec: -1, rec: -1, n: 130, c : [(2, 65), (0, 37), (1, 28)], t_train: 0.0686, t_inf: 0.0071
+#3  f1_mic: 0.80288, f1_mac: 0.73048, prec: -1, rec: -1, n: 230, c : [(2, 93), (1, 74), (0, 63)], t_train: 0.0542, t_inf: 0.0072
+__ Checkpoint: Save Data
+#4  f1_mic: 0.81414, f1_mac: 0.75327, prec: -1, rec: -1, n: 330, c : [(2, 120), (1, 110), (0, 100)], t_train: 0.0733, t_inf: 0.0578
+#5  f1_mic: 0.82572, f1_mac: 0.76909, prec: -1, rec: -1, n: 430, c : [(2, 155), (1, 144), (0, 131)], t_train: 0.0813, t_inf: 0.0075
+__ Checkpoint: Save Data
+Done AL
+
+Start Model 3 ...
+#1  f1_mic: 0.72904, f1_mac: 0.69451, prec: -1, rec: -1, n: 30, c : [(2, 10), (1, 10), (0, 10)], t_train: 0.2559, t_inf: 0.0077
+__ End Warmstart
+#2  f1_mic: 0.74218, f1_mac: 0.61399, prec: -1, rec: -1, n: 130, c : [(2, 67), (0, 34), (1, 29)], t_train: 0.0247, t_inf: 0.0104
+#3  f1_mic: 0.7913, f1_mac: 0.73157, prec: -1, rec: -1, n: 230, c : [(2, 84), (1, 75), (0, 71)], t_train: 0.0407, t_inf: 0.0339
+__ Checkpoint: Save Data
+#4  f1_mic: 0.80851, f1_mac: 0.76129, prec: -1, rec: -1, n: 330, c : [(2, 115), (1, 108), (0, 107)], t_train: 0.0669, t_inf: 0.0065
+#5  f1_mic: 0.81633, f1_mac: 0.76334, prec: -1, rec: -1, n: 430, c : [(2, 158), (1, 144), (0, 128)], t_train: 0.0818, t_inf: 0.0065
+__ Checkpoint: Save Data
+Done AL
+
+Start Model 4 ...
+#1  f1_mic: 0.74687, f1_mac: 0.70043, prec: -1, rec: -1, n: 30, c : [(2, 10), (1, 10), (0, 10)], t_train: 0.0656, t_inf: 0.0067
+__ End Warmstart
+#2  f1_mic: 0.77284, f1_mac: 0.65552, prec: -1, rec: -1, n: 130, c : [(2, 60), (1, 35), (0, 35)], t_train: 0.0279, t_inf: 0.0067
+#3  f1_mic: 0.79725, f1_mac: 0.72077, prec: -1, rec: -1, n: 230, c : [(2, 85), (1, 81), (0, 64)], t_train: 0.0341, t_inf: 0.0069
+__ Checkpoint: Save Data
+#4  f1_mic: 0.81539, f1_mac: 0.75759, prec: -1, rec: -1, n: 330, c : [(2, 120), (1, 108), (0, 102)], t_train: 0.0437, t_inf: 0.0291
+#5  f1_mic: 0.82165, f1_mac: 0.76674, prec: -1, rec: -1, n: 430, c : [(2, 155), (1, 138), (0, 137)], t_train: 0.0685, t_inf: 0.0084
+__ Checkpoint: Save Data
+Done AL
+

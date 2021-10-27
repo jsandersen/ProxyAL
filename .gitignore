@@ -1,0 +1,19 @@
+
+# data sets 
+data/datasets/
+
+# encodings
+encodings/enc/
+
+# eval data
+eval_proxy/res/
+
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Jupyter Notebook
+.ipynb_checkpoints
+

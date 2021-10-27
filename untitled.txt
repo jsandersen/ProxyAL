@@ -1,0 +1,8 @@
+# active learning strategies
+https://github.com/dsgissin/DiscriminativeActiveLearning
+https://github.com/IBM/low-resource-text-classification-framework/blob/main/lrtc_lib/active_learning/core/strategy/core_set_utils.py
+https://github.com/google/active-learning/blob/master/sampling_methods/kcenter_greedy.py
+https://github.com/stanford-futuredata/selection-via-proxy/tree/master/svp
+https://github.com/ej0cl6/deep-active-learning
+https://github.com/superannotateai/active_learning/blob/master/active_learning/discriminative_learning.py
+https://github.com/yongjin-shin/awesome-active-learning
