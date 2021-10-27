@@ -4,16 +4,16 @@ sys.path.append(cwd + '/../.')
 
 import numpy as np
 from sklearn.linear_model import LogisticRegression
-from src.training_loop import SKLearnActiveLearner, KerasActiveLearner
+from src.training_loop2 import SKLearnActiveLearner, KerasActiveLearner
 from matplotlib import pyplot as plt
 import pandas as pd
 import argparse
 
 save_dir = './app_store_sbert'
-train_X_dir = './../encodings/app_store_sbert_%s_X_train.npy'
-train_y_dir = './../encodings/app_store_sbert_%s_y_train.npy'
-test_X_dir = './../encodings/app_store_sbert_%s_X_test.npy'
-test_y_dir = './../encodings/app_store_sbert_%s_y_test.npy'
+train_X_dir = './../encodings/enc/app_store_sbert_%s_X_train.npy'
+train_y_dir = './../encodings/enc/app_store_sbert_%s_y_train.npy'
+test_X_dir = './../encodings/enc/app_store_sbert_%s_X_test.npy'
+test_y_dir = './../encodings/enc/app_store_sbert_%s_y_test.npy'
 
 n = 5
     
@@ -37,7 +37,7 @@ if __name__ == "__main__":
     save_and_repeat = args.save_repeat
     sample_size_per_step = args.batch_size
     
-    save_dir = '%s_%s_%s_%s' % (save_dir, sample_size_per_step, al_steps, save_and_repeat)
+    save_dir = './res/%s_%s_%s_%s' % (save_dir, sample_size_per_step, al_steps, save_and_repeat)
     print('Save into ', save_dir, ' ...')
     
     

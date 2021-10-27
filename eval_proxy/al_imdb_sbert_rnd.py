@@ -4,7 +4,7 @@ sys.path.append(cwd + '/../.')
 
 import numpy as np
 from sklearn.linear_model import LogisticRegression
-from src.training_loop import SKLearnActiveLearner, KerasActiveLearner
+from src.training_loop2 import SKLearnActiveLearner, KerasActiveLearner
 from matplotlib import pyplot as plt
 import pandas as pd
 import argparse

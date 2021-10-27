@@ -16,6 +16,7 @@ parser.add_argument("--steps", type=int, default=30)
 parser.add_argument("--batch_size", type=int, default=1)
 parser.add_argument("--save_repeat", type=int, default=1)
 parser.add_argument('--query_strategy', type=QueryStrategy.from_string, choices=list(QueryStrategy))
+parser.add_argument('--random', default=False, action="store_true")
 
 
 if __name__ == "__main__":
@@ -27,10 +28,22 @@ if __name__ == "__main__":
     save_and_repeat = args.save_repeat
     sample_size_per_step = args.batch_size
     query_strategy = args.query_strategy
+    random = args.random
     
-    save_dir = f'./{dataset}_{encoding}_{str(query_strategy)}_{name}'
+    name_postfix = ""
     
-    el = EvaluationLoop(save_dir, dataset, encoding, sample_size_per_step, al_steps, save_and_repeat, query_strategy)
+    print('#############')
+    print(random)
+    print('#############')
+    
+    if random:
+        print('Random query strategy is used. Selection is ignored.')
+        name_postfix = "_rnd"
+        query_strategy = QueryStrategy.unc
+    
+    save_dir = f'./res/{dataset}_{encoding}_{str(query_strategy)}_{name}{name_postfix}'
+    
+    el = EvaluationLoop(save_dir, dataset, encoding, sample_size_per_step, al_steps, save_and_repeat, query_strategy, random)
     el.run()
     
     

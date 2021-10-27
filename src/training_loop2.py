@@ -22,7 +22,7 @@ from tqdm import tqdm
 from src.al_seed import k_means_balance
 from src.DensityEstimator import DensityEstimator
 from src.InstabilityEstimator import InstabilityEstimator
-from src.UncertaintyEstimator import least_confidence, entropy, smallest_margin, random
+from src.UncertaintyEstimator import least_confidence, entropy, smallest_margin
 
 from abc import ABC, abstractmethod
 
@@ -110,10 +110,8 @@ class ActiveLearner(ABC):
         self.times_inf.append(time_inf)
     
     def run_active_learning_rnd(self, n, step_size=10):
-        
+        print('rnd')
         for it in range(n):
-            
-            
             
             # check
             self.X_al_training.extend(self.X_pool[:step_size])
@@ -135,14 +133,9 @@ class ActiveLearner(ABC):
             self.times_inf.append(time_inf)
         
         return self.f1_mic_scores, self.f1_mac_scores, self.precision_score, self.recall_scores, self.c_scores, self.times_train, self.times_inf
-            
-    
-    @abstractmethod
-    def _query(self, X_pool):
-        while False:
-            yield None
     
     def run_active_learning(self, n, step_size=10):
+        print('normal')
         for it in range(n):
             index = self._query(self.X_pool, step_size)
             
@@ -168,6 +161,11 @@ class ActiveLearner(ABC):
             self.times_inf.append(time_inf)
         
         return self.f1_mic_scores, self.f1_mac_scores, self.precision_score, self.recall_scores, self.c_scores, self.times_train, self.times_inf
+    
+    @abstractmethod
+    def _query(self, X_pool):
+        while False:
+            yield None
     
     def get_training_index(self):
         return self.X_al_index
