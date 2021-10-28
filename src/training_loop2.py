@@ -112,6 +112,7 @@ class ActiveLearner(ABC):
     def run_active_learning_rnd(self, n, step_size=10):
         print('rnd')
         for it in range(n):
+            self.X_pool, self.y_pool, self.X_pool_index = shuffle(self.X_pool, self.y_pool, self.X_pool_index, random_state=42)
             
             # check
             self.X_al_training.extend(self.X_pool[:step_size])
