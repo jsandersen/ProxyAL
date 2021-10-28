@@ -13,11 +13,14 @@ from nltk.stem.porter import PorterStemmer
 from nltk.corpus import stopwords
 import spacy
 from spacy.lang.en import English
-
 from sklearn.model_selection import train_test_split
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.model_selection import train_test_split, StratifiedShuffleSplit
 
 parser = argparse.ArgumentParser(description='tfidf Text Encoder')
 parser.add_argument("--data_set", type=str, default='imdb')
+
+splits = 5
 
 def tokenizeText(text):
     
@@ -47,10 +50,11 @@ if __name__ == "__main__":
     data_set = args.data_set
     print('Starting to embedd %s data set ...' % data_set)
 
-    if not (os.path.isfile('./%s_X_train.npy') and os.path.isfile('./%s_X_test.npy') and os.path.isfile('./%s_y_train') and os.path.isfile('./%s_y_test.npy')): 
+    if True:
+    #if not (os.path.isfile('./%s_X_train.npy') and os.path.isfile('./%s_X_test.npy') and os.path.isfile('./%s_y_train') and os.path.isfile('./%s_y_test.npy')): 
 
         print('Load %s data set ...' % data_set)
-        data_X = np.load('./../data/%s_X.npy' % data_set)
+        data_X = np.load('./../data/datasets/%s_X.npy' % data_set)
 
         print('Tokenize dataset ...')
         nlp = spacy.load("en_core_web_sm")
@@ -58,17 +62,34 @@ if __name__ == "__main__":
         symbols = " ".join(string.punctuation).split(" ") + ["-", "...", "”", "”","''"]
         
         X_tokenizes = [tokenizeText(x) for x in (data_X)]
-
-        print('Create train-test-split ...')
-        data_y = np.load('./../data/%s_y.npy' % data_set)
-        X_train, X_test, y_train, y_test = train_test_split(X_tokenizes, data_y, test_size=0.50, random_state=42)
-
-        print('Save split ...')
-        np.save('tfidf_%s_X_train' % data_set, X_train)
-        np.save('tfidf_%s_X_test' % data_set, X_test)    
-        np.save('tfidf_%s_y_train' % data_set, y_train)    
-        np.save('tfidf_%s_y_test' % data_set, y_test)    
-
+        X_tokenizes = np.array(X_tokenizes)
+        
+        print('Create-Train-Test-Split ...')
+        sss = StratifiedShuffleSplit(n_splits=splits, test_size=0.5, random_state=0)
+        
+        data_y = np.load('./../data/datasets/%s_y.npy' % data_set)
+        
+        sss.get_n_splits(X_tokenizes, data_y)
+        i = 0
+        for train_index, test_index in sss.split(X_tokenizes, data_y):
+            
+            X_train, X_test = X_tokenizes[train_index], X_tokenizes[test_index]
+            y_train, y_test = data_y[train_index], data_y[test_index]
+        
+            print(f'Encode ... #{i}')
+            count_vect = TfidfVectorizer(analyzer='word', token_pattern=r'\w{1,}', max_features=20000)
+            count_vect.fit(X_train)
+            
+            X_train = count_vect.transform(X_train)
+            X_test = count_vect.transform(X_test)
+        
+            print(f'Save split ... #{i}')
+            np.save('./enc/%s_tfidf%s_X_train' % (data_set, i), X_train)
+            np.save('./enc/%s_tfidf_%s_X_test' % (data_set, i), X_test)    
+            np.save('./enc/%s_tfidf_%s_y_train' % (data_set, i), y_train)    
+            np.save('./enc/%s_tfidf_%s_y_test' % (data_set, i), y_test)    
+            
+            i = i + 1
         print('Done')
     else:
         print('Encoding already exists.')

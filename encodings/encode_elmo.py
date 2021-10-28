@@ -1,15 +1,31 @@
 # pip install -U sentence-transformers
+import tensorflow as tf
+tf.compat.v1.disable_eager_execution()
+
 import argparse
 import numpy as np
 import os
 
-from sentence_transformers import SentenceTransformer
+from tqdm import tqdm
+
+import tensorflow_hub as hub
+
+
 from sklearn.model_selection import train_test_split, StratifiedShuffleSplit
 
 parser = argparse.ArgumentParser(description='SBERT Text Encoder')
 parser.add_argument("--data_set", type=str, default='imdb')
 
 splits = 5
+
+# ELMo Embedding
+def elmo_default(x, elmo):
+    embeddings = elmo(x, signature="default", as_dict=True)["default"]
+
+    with tf.compat.v1.Session() as sess:
+        sess.run(tf.compat.v1.global_variables_initializer())
+        sess.run(tf.compat.v1.tables_initializer())
+        return sess.run(embeddings).tolist()
 
 if __name__ == "__main__":
     args = parser.parse_args()
@@ -23,17 +39,25 @@ if __name__ == "__main__":
         data_X = np.load('./../data/datasets/%s_X.npy' % data_set)
 
         print('Load encoder ...')
-        sbert = SentenceTransformer('all-mpnet-base-v2')
+        elmo = hub.Module("https://tfhub.dev/google/elmo/2", trainable=False)
 
         print('Encode ...')
-        embeddings = sbert.encode(data_X)
+        
+        data_X_list = [data_X[i:i+20] for i in range(0,data_X.shape[0],20)]
+        embeddings = np.array([elmo_default(x, elmo) for x in tqdm(data_X_list)])
         data_X = None
-
+        
+        ex = []
+        for i in range(len(embeddings)):
+            ex.extend(embeddings[i])
+        embeddings = np.array(ex)
+        
         print('Create-Train-Test-Split ...')
         sss = StratifiedShuffleSplit(n_splits=splits, test_size=0.5, random_state=0)
         
         data_y = np.load('./../data/datasets/%s_y.npy' % data_set)
         #data_index = np.load('./../data/%s_index.npy' % data_set)
+       
         
         sss.get_n_splits(embeddings, data_y)
         i = 0
