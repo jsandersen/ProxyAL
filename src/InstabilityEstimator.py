@@ -48,3 +48,13 @@ class InstabilityEstimator:
         for k in range(i-l, i):
             _sum = _sum + ( (preds_class[k] != preds_class[k-1]) * (preds[k] - preds[k-1]) )
         return np.array(preds[i-1] + _sum)
+    
+    def islsq(self):
+        preds = self.unc_history
+        preds_class = self.preds_class_history
+        l = len(preds) if n > len(preds) else n
+        i = len(preds)
+        _sum = 0
+        for k in range(i-l, i):
+            _sum = _sum + ( (preds_class[k] == preds_class[k-1]) * (preds[k] - preds[k-1]) )
+        return np.array(preds[i-1] + _sum)

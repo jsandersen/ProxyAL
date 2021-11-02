@@ -148,7 +148,7 @@ if __name__ == "__main__":
             y_train, y_test = data_y[train_index], data_y[test_index]
         
             print(f'Save split ... #{i}')
-            np.save('./enc/%s_sif%s_X_train' % (data_set, i), X_train)
+            np.save('./enc/%s_sif_%s_X_train' % (data_set, i), X_train)
             np.save('./enc/%s_sif_%s_X_test' % (data_set, i), X_test)    
             np.save('./enc/%s_sif_%s_y_train' % (data_set, i), y_train)    
             np.save('./enc/%s_sif_%s_y_test' % (data_set, i), y_test)    

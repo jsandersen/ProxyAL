@@ -222,7 +222,7 @@ class SKLearnActiveLearner(ActiveLearner):
      
     def _query(self, X_pool, step_size):
         proba_pool = self.clf.predict_proba(X_pool)
-        ranking = smallest_margin(proba_pool) # sampling method []
+        ranking = least_confidence(proba_pool) # sampling method []
         
         if self.selection == QueryStrategy.unc_density:
             ds = self.de.density_score(self.X_pool_index)
@@ -252,8 +252,8 @@ class SKLearnActiveLearner(ActiveLearner):
             
         if self.selection == QueryStrategy.unc_isls:
             self.ie.next_iteration(self.X_pool_index, ranking, proba_pool.argmax(axis=1))
-            isls = self.ie.isls()
-            ranking = ranking * isls    
+            islsq = self.ie.islsq()
+            ranking = ranking * islsq    
    
         return (-ranking).argsort()[:step_size]
 

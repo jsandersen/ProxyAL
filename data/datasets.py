@@ -17,6 +17,10 @@ class Datasets(Enum):
             
 class Encodings(Enum):
     sbert = auto()
+    elmo = auto()
+    sif = auto()
+    iftif = auto()
+    bert = auto()
     
     def __str__(self):
         return self.name
