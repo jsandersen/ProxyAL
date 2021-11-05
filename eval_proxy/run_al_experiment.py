@@ -17,7 +17,7 @@ parser.add_argument("--batch_size", type=int, default=1)
 parser.add_argument("--save_repeat", type=int, default=1)
 parser.add_argument('--query_strategy', type=QueryStrategy.from_string, choices=list(QueryStrategy))
 parser.add_argument('--random', default=False, action="store_true")
-
+parser.add_argument('--warmstart', type=int, default=10)
 
 if __name__ == "__main__":
     args = parser.parse_args()
@@ -28,6 +28,7 @@ if __name__ == "__main__":
     save_and_repeat = args.save_repeat
     sample_size_per_step = args.batch_size
     query_strategy = args.query_strategy
+    warmstart = args.warmstart
     random = args.random
     
     name_postfix = ""
@@ -43,7 +44,7 @@ if __name__ == "__main__":
     
     save_dir = f'./res/{dataset}_{encoding}_{str(query_strategy)}_{name}{name_postfix}'
     
-    el = EvaluationLoop(save_dir, dataset, encoding, sample_size_per_step, al_steps, save_and_repeat, query_strategy, random)
+    el = EvaluationLoop(save_dir, dataset, encoding, sample_size_per_step, al_steps, save_and_repeat, query_strategy, warmstart=warmstart, random=random)
     el.run()
     
     

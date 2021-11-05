@@ -33,8 +33,8 @@ def elmo_default_fast(x, elmo):
     session.run(init_op)
 
     embeddings = []
-    for i in tqdm(range(0, x.shape[0],5)):
-        embed = session.run(embedded_text, feed_dict={text_input: x[i:i+5]})
+    for i in tqdm(range(0, x.shape[0],1)):
+        embed = session.run(embedded_text, feed_dict={text_input: x[i:i+1]})
         embeddings.extend(embed)
     
     return np.array(embeddings)

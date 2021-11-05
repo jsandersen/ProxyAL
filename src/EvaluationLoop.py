@@ -10,7 +10,7 @@ n = 5
 
 class EvaluationLoop:
     
-    def __init__(self, save_dir, dataset, encoding, sample_size_per_step, al_steps, save_and_repeat, query_strategy, random=False):
+    def __init__(self, save_dir, dataset, encoding, sample_size_per_step, al_steps, save_and_repeat, query_strategy, warmstart = 10, random=False):
         self.train_X_dir = f'./../encodings/enc/{dataset}_{encoding}_%s_X_train.npy'
         self.train_y_dir = f'./../encodings/enc/{dataset}_{encoding}_%s_y_train.npy'
         self.test_X_dir = f'./../encodings/enc/{dataset}_{encoding}_%s_X_test.npy'
@@ -20,6 +20,7 @@ class EvaluationLoop:
         self.save_and_repeat = save_and_repeat
         self.query_strategy = query_strategy
         self.random = random
+        self.warmstart = warmstart
         
         self.save_dir = '%s_%s_%s_%s' % (save_dir, sample_size_per_step, al_steps, save_and_repeat)
         print('Save directory: ', self.save_dir)
@@ -51,7 +52,7 @@ class EvaluationLoop:
             used_index_list = []
             
             al = SKLearnActiveLearner(
-                10, 
+                self.warmstart, # 10 
                 self._getXtrain(i), 
                 self._getytrain(i), 
                 X_test,

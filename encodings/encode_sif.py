@@ -124,8 +124,6 @@ if __name__ == "__main__":
         with open('glove.840B.300d.pkl', 'rb') as pkl:
             glove = pickle.load(pkl)
         
-        print(data_X[0])
-        
         X_tokenizes = [tokenizeText(x) for x in (data_X)]
         X_tokenizes = [x.split(' ') for x in X_tokenizes]
         

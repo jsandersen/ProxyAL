@@ -3,6 +3,9 @@ from enum import Enum, auto
 class Datasets(Enum):
     imdb = auto()
     app_store = auto()
+    news_groups = auto()
+    hate_speech = auto()
+    reuters = auto()
     
     def __str__(self):
         return self.name
