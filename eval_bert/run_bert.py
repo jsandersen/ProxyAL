@@ -32,6 +32,7 @@ parser.add_argument("--batch_size", type=int, default=1)
 parser.add_argument("--save_repeat", type=int, default=1)
 parser.add_argument('--query_strategy', type=QueryStrategy.from_string, choices=list(QueryStrategy))
 parser.add_argument('--random', default=False, action="store_true")
+parser.add_argument('--training_index', type=int, default=-1)
 
 if __name__ == "__main__":
     args = parser.parse_args()
@@ -43,6 +44,7 @@ if __name__ == "__main__":
     sample_size_per_step = args.batch_size
     query_strategy = args.query_strategy
     random = args.random
+    training_index = args.training_index
     
     print(args)
     
@@ -56,6 +58,12 @@ if __name__ == "__main__":
         print('Random query strategy is used. Selection is ignored.')
         name_postfix = "_rnd"
         query_strategy = QueryStrategy.unc
+    
+    index_postfix = ''
+    if training_index != -1:
+        index_postfix = f'_{training_index}'
+    
+    print(f'training_index: {training_index}')
     
     print('load index ... ')
     used_training_index_dir = f'../eval_proxy/res/{dataset}_{encoding}_{str(query_strategy)}_{name}{name_postfix}_{sample_size_per_step}_{al_steps}_{save_and_repeat}/used_training_index.npy'
@@ -75,7 +83,7 @@ if __name__ == "__main__":
         X_train, X_test = data_X[train_index], data_X[test_index]
         y_train, y_test = data_y[train_index], data_y[test_index]
         
-        idx = used_training_index[i][-1]
+        idx = used_training_index[i][training_index]
         
         X_used = X_train[idx]
         y_used = y_train[idx]
@@ -129,8 +137,11 @@ if __name__ == "__main__":
         
         print('Load BERT model ...')
         
+        n_classes = len(set(y_bert_train))
+        print(n_classes)
+        
         with training_args.strategy.scope():
-            model = TFBertForSequenceClassification.from_pretrained("bert-base-uncased", num_labels=3)
+            model = TFBertForSequenceClassification.from_pretrained("bert-base-uncased", num_labels=n_classes)
 
         trainer = TFTrainer(
             model=model,                         # the instantiated 🤗 Transformers model to be trained
@@ -147,7 +158,10 @@ if __name__ == "__main__":
         p_softmax = tf.nn.softmax(preds.logits, axis=1).numpy()
         y_pred = p_softmax.argmax(axis=1)
 
-        save_dir = f'./res/{dataset}_{encoding}_{str(query_strategy)}_{name}{name_postfix}_{sample_size_per_step}_{al_steps}_{save_and_repeat}'
+        
+        
+        
+        save_dir = f'./res/{dataset}_{encoding}_{str(query_strategy)}_{name}{name_postfix}_{sample_size_per_step}_{al_steps}_{save_and_repeat}{index_postfix}'
         
         if not os.path.isdir(save_dir):
             os.mkdir(save_dir)

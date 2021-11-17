@@ -5,7 +5,7 @@ sys.path.append(cwd + '/../.')
 import numpy as np
 from sklearn.linear_model import LogisticRegression
 from src.training_loop2 import SKLearnActiveLearner, KerasActiveLearner
-
+from src.UncertaintyEstimator import entropy, random
 n = 5
 
 class EvaluationLoop:
@@ -38,6 +38,7 @@ class EvaluationLoop:
         times_train_list = []
         times_inf_list = []
         used_index_meta_list = []
+        times_query_list = []
         
         for i in range(n):
             print('Start model %s ...' % i)
@@ -50,6 +51,10 @@ class EvaluationLoop:
             
             train_idx = [i for i in range(len(X_train))]
             used_index_list = []
+            
+            uncertainty_sampling=entropy
+            if self.random:
+                uncertainty_sampling=random
             
             al = SKLearnActiveLearner(
                 self.warmstart, # 10 
@@ -68,10 +73,10 @@ class EvaluationLoop:
             
             for i in range(self.save_and_repeat):
                 
-                if self.random:
-                    f1_mic, f1_mac, precision, recall, c, times_train, times_inf = al.run_active_learning_rnd(self.al_steps, self.sample_size_per_step)
+                if self.random: # TODO random
+                    f1_mic, f1_mac, precision, recall, c, times_train, times_inf, times_query = al.run_active_learning_rnd(self.al_steps, self.sample_size_per_step)
                 else:
-                    f1_mic, f1_mac, precision, recall, c, times_train, times_inf = al.run_active_learning(self.al_steps, self.sample_size_per_step)
+                    f1_mic, f1_mac, precision, recall, c, times_train, times_inf, times_query = al.run_active_learning(self.al_steps, self.sample_size_per_step)
                 
                 print('__ Checkpoint: Save Data')
                 
@@ -86,6 +91,7 @@ class EvaluationLoop:
             c_list.append(c)
             times_train_list.append(times_train)
             times_inf_list.append(times_inf)
+            times_query_list.append(times_query)
 
             used_index_meta_list.append(used_index_list)
 
@@ -102,3 +108,4 @@ class EvaluationLoop:
         np.save('%s/times_training' % self.save_dir, times_train_list)
         np.save('%s/times_inference' % self.save_dir, times_inf_list)
         np.save('%s/used_training_index' % self.save_dir, used_index_meta_list)
+        np.save('%s/times_query' % self.save_dir, times_query_list)

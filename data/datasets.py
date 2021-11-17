@@ -6,6 +6,7 @@ class Datasets(Enum):
     news_groups = auto()
     hate_speech = auto()
     reuters = auto()
+    toxic = auto()
     
     def __str__(self):
         return self.name

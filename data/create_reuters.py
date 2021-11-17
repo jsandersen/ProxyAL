@@ -9,7 +9,7 @@ from tqdm import tqdm
 import nltk
 from nltk.corpus import reuters 
 
-cat_8 = ['acq', 'earn', 'grain', 'interest', 'money-fx']
+cat_8 = ['money-supply', 'acq', 'crude', 'earn', 'grain', 'interest', 'money-fx', 'ship', 'trade']
 
 def _load_reuters(data_dir = None):
     nltk.download('reuters')

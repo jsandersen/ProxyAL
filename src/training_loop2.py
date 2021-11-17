@@ -22,7 +22,7 @@ from tqdm import tqdm
 from src.al_seed import k_means_balance
 from src.DensityEstimator import DensityEstimator
 from src.InstabilityEstimator import InstabilityEstimator
-from src.UncertaintyEstimator import least_confidence, entropy, smallest_margin
+from src.UncertaintyEstimator import entropy
 
 from abc import ABC, abstractmethod
 
@@ -70,6 +70,7 @@ class ActiveLearner(ABC):
         self.c_scores = []
         self.times_train = []
         self.times_inf = []
+        self.times_query = []
         self.n_train = 0
         
         if selection == QueryStrategy.unc_density or selection == QueryStrategy.isli_density or selection == QueryStrategy.isls_density:
@@ -84,7 +85,10 @@ class ActiveLearner(ABC):
             self.classes = list(set(y_pool.flatten()))    
     
     def run_warmstart(self):
+        query_start = timer()
         seed_idx = k_means_balance(self.warmstart_size, self.X_pool, self.y_pool, self.classes) #k_means(self.warmstart_size, self.X_pool)
+        query_end = timer()
+        query_train = query_end - query_start
         
         # remove seed examples from pool
         for i in -np.sort(-np.array(seed_idx)):
@@ -108,6 +112,7 @@ class ActiveLearner(ABC):
         self.c_scores.append(c)
         self.times_train.append(time_train)
         self.times_inf.append(time_inf)
+        self.times_query.append(query_train)
     
     def run_active_learning_rnd(self, n, step_size=10):
         print('rnd')
@@ -132,13 +137,18 @@ class ActiveLearner(ABC):
             self.c_scores.append(c)
             self.times_train.append(time_train)
             self.times_inf.append(time_inf)
+            self.times_query.append(-1)
         
-        return self.f1_mic_scores, self.f1_mac_scores, self.precision_score, self.recall_scores, self.c_scores, self.times_train, self.times_inf
+        return self.f1_mic_scores, self.f1_mac_scores, self.precision_score, self.recall_scores, self.c_scores, self.times_train, self.times_inf, self.times_query
     
     def run_active_learning(self, n, step_size=10):
         print('normal')
         for it in range(n):
+            
+            query_start = timer()
             index = self._query(self.X_pool, step_size)
+            query_end = timer()
+            query_train = query_end - query_start
             
             for i in index:
                 self.X_al_training.append(self.X_pool[i])
@@ -160,8 +170,9 @@ class ActiveLearner(ABC):
             self.c_scores.append(c)
             self.times_train.append(time_train)
             self.times_inf.append(time_inf)
+            self.times_query.append(query_train)
         
-        return self.f1_mic_scores, self.f1_mac_scores, self.precision_score, self.recall_scores, self.c_scores, self.times_train, self.times_inf
+        return self.f1_mic_scores, self.f1_mac_scores, self.precision_score, self.recall_scores, self.c_scores, self.times_train, self.times_inf, self.times_query
     
     @abstractmethod
     def _query(self, X_pool):
@@ -222,7 +233,7 @@ class SKLearnActiveLearner(ActiveLearner):
      
     def _query(self, X_pool, step_size):
         proba_pool = self.clf.predict_proba(X_pool)
-        ranking = least_confidence(proba_pool) # sampling method []
+        ranking = entropy(proba_pool) # sampling method []
         
         if self.selection == QueryStrategy.unc_density:
             ds = self.de.density_score(self.X_pool_index)
@@ -293,7 +304,7 @@ class SKLearnActiveLearnerSparse(ActiveLearner):
     def _query(self, X_pool, step_size):
         X = scipy.sparse.vstack(self.X_al_training)
         proba_pool = self.clf.predict_proba(X)
-        unc = least_confidence(proba_pool)
+        unc = entropy(proba_pool)
        
         return (-unc).argsort()[:step_size]
 

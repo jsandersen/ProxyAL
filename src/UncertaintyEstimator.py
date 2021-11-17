@@ -1,6 +1,8 @@
 from scipy.stats import entropy as entropy2
 import numpy as np
 
+np.random.seed(42)
+
 def least_confidence(probs):
     return 1 - np.array(probs).max(axis=1)
 

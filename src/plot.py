@@ -1,28 +1,42 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-def plot_f1(dirs, colors, label):
+def plot_f1(dirs, colors, label, dataset, encoding, name):
     for i in range(len(dirs)): 
         
         f1_mic_list_A, f1_mac_list_A, _, _, _, _ = _load_results(dirs[i])
         mean_f1_mic_A, _ = _get_mean_and_std(f1_mic_list_A)
         
-        plt.title('Mean Mirco-F1')
+        
         prep = _prepare(mean_f1_mic_A, 1)[1:]
         plt.plot(prep[:, 0], prep[:, 1], color=colors[i], label=label[i])
-        plt.xlim([0, 500])
-        plt.legend()
+
+        
+        print(label[i], ': ', round(prep[:, 1][-1], 4))
+    
+    plt.title('Mean Mirco-F1')
+    plt.xlim([0, 500])
+    plt.legend()
+    plt.savefig(f'./plots/mean_micro_f1_{dataset}_{encoding}_{name}_plot.pdf')  
+        
     plt.show()
     
     for i in range(len(dirs)): 
         f1_mic_list_A, f1_mac_list_A, _, _, _, _ = _load_results(dirs[i])
         _, std_f1_mic_A = _get_mean_and_std(f1_mic_list_A)
         
-        plt.title('Std. Mirco-F1')
+        
         prep = _prepare(std_f1_mic_A, 1)[1:]
         plt.plot(prep[:, 0], prep[:, 1], color=colors[i], label=label[i])
-        plt.xlim([0, 500])
-        plt.legend()
+
+        
+        print(label[i], ': ', round(prep[:, 1][-1], 4))
+    
+    plt.title('Std. Mirco-F1')
+    plt.xlim([0, 500])
+    plt.legend()    
+    plt.savefig(f'./plots/std_micro_f1_{dataset}_{encoding}_{name}_plot.pdf') 
+            
     plt.show()
     
     for i in range(len(dirs)): 
@@ -30,22 +44,33 @@ def plot_f1(dirs, colors, label):
         f1_mic_list_A, f1_mac_list_A, _, _, _, _ = _load_results(dirs[i])
         mean_f1_mac_A, _ = _get_mean_and_std(f1_mac_list_A)
         
-        plt.title('Mean Marco-F1')
+        
         prep = _prepare(mean_f1_mac_A, 1)[1:]
         plt.plot(prep[:, 0], prep[:, 1], color=colors[i], label=label[i])
-        plt.xlim([0, 500])
-        plt.legend()
+
+        
+        print(label[i], ': ', round(prep[:, 1][-1], 4))
+    
+    plt.title('Mean Marco-F1')   
+    plt.xlim([0, 500])
+    plt.legend()    
+    plt.savefig(f'./plots/mean_macro_f1_{dataset}_{encoding}_{name}_plot.pdf') 
+        
     plt.show()
     
     for i in range(len(dirs)): 
         f1_mic_list_A, f1_mac_list_A, _, _, _, _ = _load_results(dirs[i])
         _, std_f1_mac_A = _get_mean_and_std(f1_mac_list_A)
         
-        plt.title('Std. Marco-F1')
         prep = _prepare(std_f1_mac_A, 1)[1:]
         plt.plot(prep[:, 0], prep[:, 1], color=colors[i], label=label[i])
-        plt.xlim([0, 500])
-        plt.legend()
+        
+        print(label[i], ': ', round(prep[:, 1][-1], 4))
+    
+    plt.title('Std. Marco-F1')
+    plt.xlim([0, 500])
+    plt.legend()        
+    plt.savefig(f'./plots/std_macro_f1_{dataset}_{encoding}_{name}_plot.pdf') 
     plt.show()
         
 def _load_results(root_dir):
