@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-def plot_f1(dirs, colors, label, dataset, encoding, name):
+def plot_f1_merge(dirs, colors, label, dataset, encoding, name, ylim_micro = None, ylim_macro = None):
     for i in range(len(dirs)): 
         
         f1_mic_list_A, f1_mac_list_A, _, _, _, _ = _load_results(dirs[i])
@@ -14,11 +14,57 @@ def plot_f1(dirs, colors, label, dataset, encoding, name):
         
         print(label[i], ': ', round(prep[:, 1][-1], 4))
     
-    plt.title('Mean Mirco-F1')
+    
+    for i in range(len(dirs)): 
+        
+        f1_mic_list_A, f1_mac_list_A, _, _, _, _ = _load_results(dirs[i])
+        mean_f1_mac_A, _ = _get_mean_and_std(f1_mac_list_A)
+        
+        
+        prep = _prepare(mean_f1_mac_A, 1)[1:]
+        plt.plot(prep[:, 0], prep[:, 1], '-.', color=colors[i])
+
+        
+        print(label[i], ': ', round(prep[:, 1][-1], 4))
+    
+    plt.grid(True)
+    plt.locator_params(axis="y", nbins=7)
+
+    
+    plt.xlim([0, 500])
+    plt.legend()    
+    plt.xlabel('Iterations')
+    plt.ylabel('F1-Score')
+    plt.title(f'{dataset} {encoding}')  
+    
+    plt.savefig(f'./plots/mean_micro_f1_{dataset}_{encoding}_{name}_merge_plot.pdf', bbox_inches='tight')  
+    plt.show()
+    
+
+def plot_f1(dirs, colors, label, dataset, encoding, name, ylim_micro = None, ylim_macro = None):
+    for i in range(len(dirs)): 
+        
+        f1_mic_list_A, f1_mac_list_A, _, _, _, _ = _load_results(dirs[i])
+        mean_f1_mic_A, _ = _get_mean_and_std(f1_mic_list_A)
+        
+        
+        prep = _prepare(mean_f1_mic_A, 1)[1:]
+        plt.plot(prep[:, 0], prep[:, 1], color=colors[i], label=label[i])
+
+        
+        print(label[i], ': ', round(prep[:, 1][-1], 4))
+    
+    plt.title('Mean Micro-F1')
+    import numpy as np
+    #if ylim_micro:
+    #    plt.ylim(ylim_micro)
+    plt.locator_params(axis="y", nbins=7)
+    plt.grid(True)
+    
     plt.xlim([0, 500])
     plt.legend()
-    plt.savefig(f'./plots/mean_micro_f1_{dataset}_{encoding}_{name}_plot.pdf')  
-        
+    plt.savefig(f'./plots/mean_micro_f1_{dataset}_{encoding}_{name}_plot.pdf', bbox_inches='tight')  
+    
     plt.show()
     
     for i in range(len(dirs)): 
@@ -32,11 +78,12 @@ def plot_f1(dirs, colors, label, dataset, encoding, name):
         
         print(label[i], ': ', round(prep[:, 1][-1], 4))
     
-    plt.title('Std. Mirco-F1')
+    plt.title('Std. Micro-F1')
+    plt.grid(True)
     plt.xlim([0, 500])
     plt.legend()    
-    plt.savefig(f'./plots/std_micro_f1_{dataset}_{encoding}_{name}_plot.pdf') 
-            
+    plt.savefig(f'./plots/std_micro_f1_{dataset}_{encoding}_{name}_plot.pdf', bbox_inches='tight') 
+           
     plt.show()
     
     for i in range(len(dirs)): 
@@ -51,10 +98,14 @@ def plot_f1(dirs, colors, label, dataset, encoding, name):
         
         print(label[i], ': ', round(prep[:, 1][-1], 4))
     
-    plt.title('Mean Marco-F1')   
+    plt.title('Mean Marco-F1')  
+    plt.grid(True)
+    plt.locator_params(axis="y", nbins=7)
+    #if ylim_macro:
+    #    plt.ylim(ylim_macro)
     plt.xlim([0, 500])
     plt.legend()    
-    plt.savefig(f'./plots/mean_macro_f1_{dataset}_{encoding}_{name}_plot.pdf') 
+    plt.savefig(f'./plots/mean_macro_f1_{dataset}_{encoding}_{name}_plot.pdf', bbox_inches='tight') 
         
     plt.show()
     
@@ -70,7 +121,7 @@ def plot_f1(dirs, colors, label, dataset, encoding, name):
     plt.title('Std. Marco-F1')
     plt.xlim([0, 500])
     plt.legend()        
-    plt.savefig(f'./plots/std_macro_f1_{dataset}_{encoding}_{name}_plot.pdf') 
+    plt.savefig(f'./plots/std_macro_f1_{dataset}_{encoding}_{name}_plot.pdf', bbox_inches='tight') 
     plt.show()
         
 def _load_results(root_dir):
@@ -93,3 +144,41 @@ def _prepare(x, batch_site):
     for i in range(len(x)):
         res.append([i*batch_site, x[i]])
     return np.array(res)
+
+
+# libraries
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+
+def plot_balancy(load_dir):
+    c_list = np.load('%s/class_distributions.npy' % load_dir, allow_pickle=True)
+    plot_c(c_list)
+
+def plot_c(c_list):
+    meta_l = []
+    for k in range(5):
+        l = [[] for i in range(len(c_list[0, k]))]
+
+        for i in c_list[k]:
+            for j in range(len(i)):
+                l[j].append(i[j])
+
+        meta_l.append(l)
+    meta_l=np.array(meta_l).mean(axis=0)
+
+    groups = {f'group_{i}':meta_l[i] for i in range(len(l))}
+
+    # Make data
+    data = pd.DataFrame(groups)
+
+    # We need to transform the data from raw data to percentage (fraction)
+    data_perc = data.divide(data.sum(axis=1), axis=0)
+    groups_list = [data_perc[f'group_{i}'] for i in range(len(l))]
+
+    # Make the plot
+    plt.stackplot(range(501),  *groups_list, labels=['A','B','C'])
+    #plt.legend(loc='upper left')
+    plt.margins(0,0)
+    plt.title('100 % stacked area chart')
+    plt.show()
