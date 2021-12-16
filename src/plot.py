@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-def plot_f1_merge(dirs, colors, label, dataset, encoding, name, ylim_micro = None, ylim_macro = None):
+def plot_f1_merge(dirs, colors, label, dataset, encoding, name, ylim_lim = None):
     for i in range(len(dirs)): 
         
         f1_mic_list_A, f1_mac_list_A, _, _, _, _ = _load_results(dirs[i])
@@ -9,7 +9,7 @@ def plot_f1_merge(dirs, colors, label, dataset, encoding, name, ylim_micro = Non
         
         
         prep = _prepare(mean_f1_mic_A, 1)[1:]
-        plt.plot(prep[:, 0], prep[:, 1], color=colors[i], label=label[i])
+        plt.plot(prep[:, 0], prep[:, 1], color=colors[i], label=label[i].replace("_", "*"))
 
         
         print(label[i], ': ', round(prep[:, 1][-1], 4))
@@ -32,7 +32,10 @@ def plot_f1_merge(dirs, colors, label, dataset, encoding, name, ylim_micro = Non
 
     
     plt.xlim([0, 500])
-    plt.legend()    
+    if ylim_lim:
+        plt.ylim(ylim_lim)
+    
+    plt.legend(loc=4)    
     plt.xlabel('Iterations')
     plt.ylabel('F1-Score')
     plt.title(f'{dataset} {encoding}')  
@@ -151,11 +154,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 
-def plot_balancy(load_dir):
+def plot_balancy(load_dir, dataset, encoding, name):
     c_list = np.load('%s/class_distributions.npy' % load_dir, allow_pickle=True)
-    plot_c(c_list)
+    plot_c(c_list, dataset, encoding, name)
 
-def plot_c(c_list):
+def plot_c(c_list, dataset, encoding, name):
     meta_l = []
     for k in range(5):
         l = [[] for i in range(len(c_list[0, k]))]
@@ -180,5 +183,8 @@ def plot_c(c_list):
     plt.stackplot(range(501),  *groups_list, labels=['A','B','C'])
     #plt.legend(loc='upper left')
     plt.margins(0,0)
-    plt.title('100 % stacked area chart')
+    plt.title(f'{dataset} {encoding}')  
+    plt.xlabel('Iterations')
+    plt.ylabel('Class Distribution (%)')
+    plt.savefig(f'./plots/mean_micro_f1_{dataset}_{encoding}_{name}_c_plot.pdf', bbox_inches='tight')  
     plt.show()

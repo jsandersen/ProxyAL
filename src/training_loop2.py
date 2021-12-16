@@ -22,7 +22,7 @@ from tqdm import tqdm
 from src.al_seed import k_means_balance
 from src.DensityEstimator import DensityEstimator
 from src.InstabilityEstimator import InstabilityEstimator
-from src.UncertaintyEstimator import entropy
+from src.UncertaintyEstimator import entropy, smallest_margin
 
 from abc import ABC, abstractmethod
 
@@ -233,7 +233,7 @@ class SKLearnActiveLearner(ActiveLearner):
      
     def _query(self, X_pool, step_size):
         proba_pool = self.clf.predict_proba(X_pool)
-        ranking = entropy(proba_pool) # sampling method []
+        ranking = smallest_margin(proba_pool) #entropy(proba_pool) # sampling method []
         
         if self.selection == QueryStrategy.unc_density:
             ds = self.de.density_score(self.X_pool_index)

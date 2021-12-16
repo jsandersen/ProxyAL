@@ -38,7 +38,7 @@ class SamplingMethod(object):
         shape = self.X.shape
         flat_X = self.X
         if len(shape) > 2:
-          flat_X = np.reshape(self.X, (shape[0],np.product(shape[1:])))
+            flat_X = np.reshape(self.X, (shape[0],np.product(shape[1:])))
         return flat_X
 
 

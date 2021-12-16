@@ -24,6 +24,7 @@ if __name__ == "__main__":
 
         print('Load encoder ...')
         sbert = SentenceTransformer('all-mpnet-base-v2')
+        #sbert.max_seq_length = 512
 
         print('Encode ...')
         embeddings = sbert.encode(data_X)
