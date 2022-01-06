@@ -93,9 +93,9 @@ if __name__ == "__main__":
         print('tokenize ...')
         tokenizer = BertTokenizerFast.from_pretrained('bert-base-uncased')
         
-        train_encodings = tokenizer(X_bert_train.tolist(), truncation=True, padding=True)
-        val_encodings = tokenizer(X_bert_eval.tolist(), truncation=True, padding=True)
-        test_encodings = tokenizer(X_test.tolist(), truncation=True, padding=True)
+        train_encodings = tokenizer(X_bert_train.tolist(), max_length=350, truncation=True, padding=True)
+        val_encodings = tokenizer(X_bert_eval.tolist(), max_length=350, truncation=True, padding=True)
+        test_encodings = tokenizer(X_test.tolist(), max_length=350, truncation=True, padding=True)
         
         del X_bert_train
         del X_bert_eval
@@ -121,15 +121,15 @@ if __name__ == "__main__":
         
         training_args = TFTrainingArguments(
                     evaluation_strategy= "steps",
-                    output_dir='./bert_models',  
+                    output_dir=f'./bert_models_{dataset}_{name}_{i}_{training_index}', 
                     num_train_epochs=5,              # total number of training epochs
                     per_device_train_batch_size=16,  # batch size per device during training
-                    per_device_eval_batch_size=32,   # batch size for evaluation
+                    per_device_eval_batch_size=16,   # batch size for evaluation
                     #warmup_steps=500,                # number of warmup steps for learning rate scheduler
                     weight_decay=0.01,               # strength of weight decay
-                    warmup_steps=math.ceil(len(y_bert_train) / 16),
+                    warmup_steps=math.ceil(len(y_bert_train) / 12),
                     logging_dir='./logs',         # directory for storing logs
-                    logging_steps=2000,
+                    logging_steps=100000,
                     learning_rate= 5e-5,
                     save_total_limit = 1,
                     #load_best_model_at_end= True,
@@ -161,7 +161,7 @@ if __name__ == "__main__":
         
         
         
-        save_dir = f'./res/{dataset}_{encoding}_{str(query_strategy)}_{name}{name_postfix}_{sample_size_per_step}_{al_steps}_{save_and_repeat}{index_postfix}'
+        save_dir = f'./res4/{dataset}_{encoding}_{str(query_strategy)}_{name}{name_postfix}_{sample_size_per_step}_{al_steps}_{save_and_repeat}{index_postfix}'
         
         if not os.path.isdir(save_dir):
             os.mkdir(save_dir)

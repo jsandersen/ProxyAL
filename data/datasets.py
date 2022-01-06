@@ -25,6 +25,7 @@ class Encodings(Enum):
     sif = auto()
     iftif = auto()
     bert = auto()
+    albert = auto()
     
     def __str__(self):
         return self.name

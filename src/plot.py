@@ -12,7 +12,7 @@ def plot_f1_merge(dirs, colors, label, dataset, encoding, name, ylim_lim = None)
         plt.plot(prep[:, 0], prep[:, 1], color=colors[i], label=label[i].replace("_", "*"))
 
         
-        print(label[i], ': ', round(prep[:, 1][-1], 4))
+        print(label[i], ': ', round(prep[:, 1][-1], 10), round(prep[:, 1][-200], 10))
     
     
     for i in range(len(dirs)): 
@@ -25,7 +25,7 @@ def plot_f1_merge(dirs, colors, label, dataset, encoding, name, ylim_lim = None)
         plt.plot(prep[:, 0], prep[:, 1], '-.', color=colors[i])
 
         
-        print(label[i], ': ', round(prep[:, 1][-1], 4))
+        print(label[i], ': ', round(prep[:, 1][-1], 10), round(prep[:, 1][-200], 10))
     
     plt.grid(True)
     plt.locator_params(axis="y", nbins=7)

@@ -8,7 +8,7 @@ encodings/glove.*
 encodings/tmp/
 
 eval_bert/logs/
-eval_bert/res/
+eval_bert/bert_model*
 
 # eval data
 eval_proxy/res/
