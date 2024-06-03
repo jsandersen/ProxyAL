@@ -1,5 +1,3 @@
-# https://dl.acm.org/doi/pdf/10.1145/2093153.2093154?casa_token=jfJEiAOiXLcAAAAA:hlZFoIHLa1yQ_B_vLUNv7JT99RYcn0lPK0UCJtHdQXsC9gZEgG1H-I1jYDY1DREDEHzkTTREmrx0
-
 import numpy as np
 
 n = 5

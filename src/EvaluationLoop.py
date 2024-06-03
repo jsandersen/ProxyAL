@@ -27,7 +27,6 @@ class EvaluationLoop:
         
     def _getXtrain(self, i): return np.load(self.train_X_dir % i ).tolist()
     def _getytrain(self, i): return np.load(self.train_y_dir % i).tolist()
-    #def _np_flatten(self, i, x, dtype=None): return np.array(x, dtype=dtype)
 
     def run(self):
         f1_mic_list = []

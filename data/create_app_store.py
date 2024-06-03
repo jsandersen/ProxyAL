@@ -35,12 +35,8 @@ if __name__ == "__main__":
         df[0] = df[0].apply(remove_URL)
         df[0] = df[0].apply(remove_html)
 
-        
-        
         np.save('./datasets/app_store_X', df[0].tolist())
         np.save('./datasets/app_store_y', y)
-        #np.save('imdb_index', [i for i in range(len(X))])
-        
         
         print('Done')
     else:
